@@ -6,6 +6,7 @@
 #include <math.h>
 #include "anim.h"
 #include "player.h"
+#include "world.h"
 
 static player_t player = {0};
 static float rotation_angle_sine = 0,
@@ -66,12 +67,18 @@ void PlayerRotateLeft( void )
 
 void PlayerMoveForward( void )
 {
-  player.pos_x += player.sine_phi * MOVE_STEP;
-  player.pos_z += player.cosine_phi * MOVE_STEP;
+  if (WorldCanGo(1))
+  {
+    player.pos_x += player.sine_phi * MOVE_STEP;
+    player.pos_z += player.cosine_phi * MOVE_STEP;
+  }
 }
 
 void PlayerMoveBack( void )
 {
-  player.pos_x -= player.sine_phi * MOVE_STEP;
-  player.pos_z -= player.cosine_phi * MOVE_STEP;
+  if (WorldCanGo(0))
+  {
+    player.pos_x -= player.sine_phi * MOVE_STEP;
+    player.pos_z -= player.cosine_phi * MOVE_STEP;
+  }
 }
