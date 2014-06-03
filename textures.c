@@ -69,6 +69,16 @@ void TextureDrawVerticalLine( unsigned long *pixels,
   start_y *= !clip_start;
   end_y -= (end_y - wnd_height) * clip_end;
 
+  cur_pixel = pixels + screen_x;
+  next_pixel = pixels + screen_x + (wnd_height - 1) * wnd_width;
+  for (i = 0; i < start_y; ++i)
+  {
+    *cur_pixel = 0;
+    *next_pixel = 0;
+    cur_pixel += wnd_width;
+    next_pixel -= wnd_width;
+  }
+
   cur_pixel = pixels + screen_x + start_y * wnd_width;
   next_pixel = cur_pixel + wnd_width;
 

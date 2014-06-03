@@ -155,9 +155,6 @@ void WorldUpdate( unsigned long *pixels )
   int start_x, start_z, step_x, step_z;
   int search_x, search_z; // Indexes of cells for test line shift
   int x, tex_x;
-  char is_intersect, iter;
-
-  memset(pixels, 0, AnimGetWidth() * AnimGetHeight() * sizeof(unsigned long));
 
   PlayerGetPosition(&cam_x, &cam_z);
 
@@ -170,10 +167,8 @@ void WorldUpdate( unsigned long *pixels )
 
     PlayerGetRay(x, &dir_x, &dir_z);
 
-    if (dir_x == 0.f)
-      dir_x = 1e-8f;
-    if (dir_z == 0.f)
-      dir_z = 1e-8f;
+    dir_x += (dir_x == 0.f) * 1e-8f;
+    dir_z += (dir_z == 0.f) * 1e-8f;
 
     z_per_x = dir_z / dir_x;
     x_per_z = dir_x / dir_z;
@@ -181,8 +176,6 @@ void WorldUpdate( unsigned long *pixels )
     step_x = (dir_x > 0.f) * 2 - 1;
     step_z = (dir_z > 0.f) * 2 - 1;
 
-    is_intersect = 0;
-    iter = 0;
     while (cell_x >= 0 && cell_x <= MAX_CELL_COUNT_X && 
            cell_z >= 0 && cell_z <= MAX_CELL_COUNT_Z)
     {
@@ -202,7 +195,6 @@ void WorldUpdate( unsigned long *pixels )
         cell_x += step_x;
         if (map[cell_z * MAX_CELL_COUNT_Z + cell_x] != -1)
         {
-          is_intersect = 1;
           intersect_x = (float)search_x_shifted;
           tex_x = (int)(intersect_z * TEXTURE_SIDE / CELL_LENGTH);
           tex_x &= (TEXTURE_SIDE - 1);
@@ -228,7 +220,6 @@ void WorldUpdate( unsigned long *pixels )
         cell_z += step_z;
         if (map[cell_z * MAX_CELL_COUNT_Z + cell_x] != -1)
         {
-          is_intersect = 1;
           intersect_z = (float)search_z_shifted;
           tex_x = (int)(intersect_x * TEXTURE_SIDE / CELL_LENGTH);
           tex_x &= (TEXTURE_SIDE - 1);
