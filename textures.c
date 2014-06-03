@@ -56,35 +56,31 @@ void TextureDrawVerticalLine( unsigned long *pixels,
                               int texture_x,
                               int screen_x )
 {
-  unsigned long *texture, *cur_pixel;
-  int tex_start, tex_end, tex_step, tex_y, tex_y_shifted;
-  unsigned int wnd_height = AnimGetHeight(), wnd_width = AnimGetWidth();
+  unsigned long *texture, *cur_pixel, *next_pixel;
+  int tex_start, tex_end, tex_step, tex_y_shifted, tex_y1_shifted, saved_start;
+  int wnd_height = (int)AnimGetHeight(), wnd_width = (int)AnimGetWidth();
   int i;
+  char clip_start = (start_y < 0), clip_end = (end_y >= (int)wnd_height);
 
-  tex_start = 0;
-  tex_end = TEXTURE_SIDE - 1;
-  tex_y = start_y;
-  if (start_y < 0)
-  {
-    tex_start = (int)(-(float)start_y * TEXTURE_SIDE / ((float)end_y - start_y));
-    start_y = 0;
-  }
-  if (end_y >= (int)wnd_height)
-  {
-    tex_end = (int)((-tex_y + (float)wnd_height) * TEXTURE_SIDE / ((float)end_y - tex_y));
-    end_y = wnd_height - 1;
-  }
+  tex_start = (int)(-(float)start_y * TEXTURE_SIDE / ((float)end_y - start_y)) * clip_start;
+  tex_end = (TEXTURE_SIDE - 1) * (!clip_end) + clip_end * (int)((-start_y + (float)wnd_height) * TEXTURE_SIDE / ((float)end_y - start_y));
+  saved_start = start_y;
+  start_y *= !clip_start;
+  end_y -= (end_y - wnd_height) * clip_end;
 
   cur_pixel = pixels + screen_x + start_y * wnd_width;
+  next_pixel = cur_pixel + wnd_width;
 
   texture = textures[texture_index] + texture_x;
   tex_step = ((tex_end - tex_start) << 16) / (end_y - start_y);
-  tex_y_shifted = tex_start << 16;
-  for (i = start_y; i <= end_y; ++i)
+  tex_y1_shifted = (tex_y_shifted = tex_start << 16) + tex_step;
+  for (i = start_y; i < end_y; i += 2)
   {
-    tex_y = tex_y_shifted >> 16;
-    *cur_pixel = texture[tex_y << TEXTURE_SIDE_DEGREE];
-    cur_pixel += wnd_width;
-    tex_y_shifted += tex_step;
+    *cur_pixel = texture[(tex_y_shifted >> 16) << TEXTURE_SIDE_DEGREE];
+    *next_pixel = texture[(tex_y1_shifted >> 16) << TEXTURE_SIDE_DEGREE];
+    cur_pixel += wnd_width * 2;
+    next_pixel += wnd_width * 2;
+    tex_y_shifted += tex_step * 2;
+    tex_y1_shifted += tex_step * 2;
   }
 }
