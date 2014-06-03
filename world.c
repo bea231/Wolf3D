@@ -182,20 +182,24 @@ void WorldUpdate( unsigned long *pixels )
     while (cell_x >= 0 && cell_x <= MAX_CELL_COUNT_X && 
            cell_z >= 0 && cell_z <= MAX_CELL_COUNT_Z)
     {
+      int search_x_shifted, search_z_shifted;
+
       search_x = cell_x + (step_x > 0);
       search_z = cell_z + (step_z > 0);
+      search_x_shifted = search_x << CELL_LENGTH_DEGREE;
+      search_z_shifted = search_z << CELL_LENGTH_DEGREE;
 
-      intersect_z = cam_z + z_per_x * ((search_x << CELL_LENGTH_DEGREE) - cam_x);
-      intersect_x = cam_x + x_per_z * ((search_z << CELL_LENGTH_DEGREE) - cam_z);
+      intersect_z = cam_z + z_per_x * (search_x_shifted - cam_x);
+      intersect_x = cam_x + x_per_z * (search_z_shifted - cam_z);
 
-      if ((step_z > 0 && intersect_z <= (search_z << CELL_LENGTH_DEGREE)) ||
-          (step_z < 0 && intersect_z >= (search_z << CELL_LENGTH_DEGREE)))
+      if ((step_z > 0 && intersect_z <= search_z_shifted) ||
+          (step_z < 0 && intersect_z >= search_z_shifted))
       {
         cell_x += step_x;
         if (map[cell_z * MAX_CELL_COUNT_Z + cell_x] != -1)
         {
           is_intersect = 1;
-          intersect_x = (float)(search_x << CELL_LENGTH_DEGREE);
+          intersect_x = (float)search_x_shifted;
           tex_x = (int)(intersect_z * TEXTURE_SIDE / CELL_LENGTH);
           tex_x &= (TEXTURE_SIDE - 1);
 
@@ -221,7 +225,7 @@ void WorldUpdate( unsigned long *pixels )
         if (map[cell_z * MAX_CELL_COUNT_Z + cell_x] != -1)
         {
           is_intersect = 1;
-          intersect_z = (float)(search_z << CELL_LENGTH_DEGREE);
+          intersect_z = (float)search_z_shifted;
           tex_x = (int)(intersect_x * TEXTURE_SIDE / CELL_LENGTH);
           tex_x &= (TEXTURE_SIDE - 1);
 

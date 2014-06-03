@@ -89,7 +89,7 @@ INT WINAPI WinMain( HINSTANCE hInst, HINSTANCE hPrevInst, CHAR *CmdLine, INT Sho
 
   AnimPreinit();
   hMainWnd = CreateWindow(CLS_NAME, WND_NAME, WS_OVERLAPPEDWINDOW,
-    0, 0, GetSystemMetrics(SM_CXSCREEN), 800,
+    0, 0, 640, 480,
       NULL, NULL, hInst, NULL);
   
   if (hMainWnd == NULL)
