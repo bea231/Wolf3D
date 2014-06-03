@@ -57,14 +57,15 @@ void TextureDrawVerticalLine( unsigned long *pixels,
                               int screen_x )
 {
   unsigned long *texture, *cur_pixel, *next_pixel;
-  int tex_start, tex_end, tex_step, tex_y_shifted, tex_y1_shifted, saved_start;
-  int wnd_height = (int)AnimGetHeight(), wnd_width = (int)AnimGetWidth();
+  int tex_start, tex_end, tex_step, tex_y_shifted, tex_y1_shifted;
   int i;
-  char clip_start = (start_y < 0), clip_end = (end_y >= (int)wnd_height);
+  int const wnd_height = (int)AnimGetHeight(), wnd_width = (int)AnimGetWidth(),
+            saved_start = start_y;
+  char const clip_start = (start_y < 0), clip_end = (end_y >= (int)wnd_height);
+
 
   tex_start = (int)(-(float)start_y * TEXTURE_SIDE / ((float)end_y - start_y)) * clip_start;
   tex_end = (TEXTURE_SIDE - 1) * (!clip_end) + clip_end * (int)((-start_y + (float)wnd_height) * TEXTURE_SIDE / ((float)end_y - start_y));
-  saved_start = start_y;
   start_y *= !clip_start;
   end_y -= (end_y - wnd_height) * clip_end;
 

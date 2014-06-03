@@ -9,13 +9,13 @@
 #include "world.h"
 
 static player_t player = {0};
-static float rotation_angle_sine = 0,
-             rotation_angle_cosine = 0;
+static float const rotation_angle_sine = ROTATE_ANGLE_SINE,
+                   rotation_angle_cosine = ROTATE_ANGLE_COSINE;
 
 void PlayerInit( float start_x, float start_z )
 {
-  rotation_angle_sine = sinf(ROTATE_ANGLE);
-  rotation_angle_cosine = cosf(ROTATE_ANGLE);
+  /*rotation_angle_sine = sinf(ROTATE_ANGLE);
+  rotation_angle_cosine = cosf(ROTATE_ANGLE);*/
 
   player.cosine_phi = 1;
   player.sine_phi = 0;
@@ -37,9 +37,8 @@ void PlayerGetPosition( float *x, float *z )
 
 void PlayerGetRay( int to_x, float *dir_x, float *dir_z )
 {
-  float scale;
   float const width = (float)AnimGetWidth();
-  scale = (to_x - width /2) / width;
+  float const scale = (to_x - width /2) / width;
 
   *dir_x = player.sine_phi - player.cosine_phi * scale * CAMERA_WIDTH;
   *dir_z = player.cosine_phi + player.sine_phi * scale * CAMERA_WIDTH;
@@ -52,7 +51,7 @@ void PlayerGetLookAt( float *at_x, float *at_z )
 
 void PlayerRotateRight( void )
 {
-  float sine = player.sine_phi, cosine = player.cosine_phi;
+  float const sine = player.sine_phi, cosine = player.cosine_phi;
 
   player.cosine_phi = cosine * rotation_angle_cosine + sine * rotation_angle_sine;
   player.sine_phi = sine * rotation_angle_cosine - cosine * rotation_angle_sine;
@@ -60,7 +59,7 @@ void PlayerRotateRight( void )
 
 void PlayerRotateLeft( void )
 {
-  float sine = player.sine_phi, cosine = player.cosine_phi;
+  float const sine = player.sine_phi, cosine = player.cosine_phi;
   player.cosine_phi = cosine * rotation_angle_cosine - sine * rotation_angle_sine;
   player.sine_phi = sine * rotation_angle_cosine + cosine * rotation_angle_sine;
 }
