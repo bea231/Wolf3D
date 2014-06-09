@@ -12,7 +12,7 @@
 #define CELL_LENGTH_DEGREE    4
 #define CELL_LENGTH           (1L<<CELL_LENGTH_DEGREE)
 #define WALL_HEIGHT           CELL_LENGTH * 1.3f
-#define MIN_WALL_DIST         0.8
+#define MIN_WALL_DIST         2.f
 
 char WorldInit( char *fileName, unsigned int **textures );
 void WorldClose( void );

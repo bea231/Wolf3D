@@ -206,7 +206,7 @@ void WorldUpdate( unsigned long *pixels )
 
           dist = (AnimGetHeight() * WALL_HEIGHT * 0.25f) / dist;
 
-          TextureDrawVerticalLine(pixels, 
+          TextureDrawVerticalLineAsm(pixels, 
                                   (int)(AnimGetHeight() / 2 - dist),
                                   (int)(AnimGetHeight() / 2 + dist),
                                   map[cell_z * MAX_CELL_COUNT_Z + cell_x],
@@ -231,7 +231,7 @@ void WorldUpdate( unsigned long *pixels )
 
           dist = (AnimGetHeight() * WALL_HEIGHT * 0.25f) / dist;
 
-          TextureDrawVerticalLine(pixels, 
+          TextureDrawVerticalLineAsm(pixels, 
                                   (int)(AnimGetHeight() / 2 - dist),
                                   (int)(AnimGetHeight() / 2 + dist),
                                   map[cell_z * MAX_CELL_COUNT_Z + cell_x],

@@ -20,5 +20,11 @@ void TextureDrawVerticalLine( unsigned long *pixels,
                               int texture_index,
                               int texture_x,
                               int screen_x );
+void TextureDrawVerticalLineAsm( unsigned long *pixels,
+                                 int start_y,
+                                 unsigned int end_y,
+                                 int texture_index,
+                                 int texture_x,
+                                 int screen_x );
 
 #endif /* _TEXTURES_H_ */
